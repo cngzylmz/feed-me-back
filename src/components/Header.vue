@@ -19,10 +19,9 @@ export default {
   name: 'HeaderCommon',
 
   methods: {
-    playSounds() {
+    async playSounds() {
       var audio = new Audio(require('@/assets/hit.mp3'));
       audio.play();
-      console.log('gelidim ');
     },
   },
 

@@ -9,7 +9,7 @@
   />
   <MenuTop @name="getUserComments($event)"></MenuTop>
   <LoadingRock :isShow="userName === ''" />
-  <UserComments v-if="userName === 'Cengiz'" :name="userName"></UserComments>
+  <UserComments v-if="userName === ''" :name="userName"></UserComments>
 </template>
 
 <script>
