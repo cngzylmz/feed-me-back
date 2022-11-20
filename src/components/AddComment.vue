@@ -2,7 +2,7 @@
   <div class="textarea">
     <a-textarea
       v-model:value="value"
-      placeholder="Autosize height with minimum and maximum number of lines"
+      placeholder="Vurun abalıya :D"
       :auto-size="{ minRows: 2, maxRows: 5 }"
     />
     <p v-if="alert" style="color: red">Düzgün bişeyler yaz !!!</p>
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     saveComment() {
-      this.value.length < 2 ? (this.alert = true) : (this.alert = false);
+      this.value.length < 10 ? (this.alert = true) : (this.alert = false);
       if (!this.alert) {
         this.$emit('sendComment', this.value);
         this.value = '';
