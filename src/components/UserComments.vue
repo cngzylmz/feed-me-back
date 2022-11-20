@@ -1,47 +1,57 @@
 <template>
-  <div>
-    <CommentCard :comment="c" v-for="(c,i) in comments" :key="i"></CommentCard>
-  </div>
+  <RollingRock v-if="!isDisplay" />
+  <AddComment v-if="isDisplay" @sendComment="saveComment($event)"></AddComment>
+  <CommentCard v-if="isDisplay" :comment="comments"></CommentCard>
 </template>
 
 <script>
-import { getAll } from '../utilities/connectDB';
 import CommentCard from '../components/CommentCard.vue';
+import AddComment from './AddComment.vue';
+import RollingRock from './RollingRock.vue';
+import axios from 'axios';
 
 export default {
   name: 'UserComponent',
   components: {
     CommentCard,
+    AddComment,
+    RollingRock,
   },
   props: {
-    userName: {
-      type: String,
-      default: 'Cengiz',
-    },
+    userName: String,
   },
   data() {
     return {
       comments: [],
       isDisplay: true,
+      baseURI: 'https://feed-me-back-server.herokuapp.com/',
     };
   },
   methods: {
-    getUserCommentsa() {
-      getAll()
-        .then((a) => {
-          console.log(a);
-          this.comments = a.Cengiz;
+    async getByName(name) {
+      const a = await axios.get(
+        this.baseURI + 'comments/' + name.toLowerCase()
+      );
+      this.comments = a.data.comments;
+    },
+    async saveComment(comment) {
+      this.comments.push(comment);
+      const data = {
+        name: this.userName.toLocaleLowerCase(),
+        comments: this.comments,
+      };
+      this.isDisplay = false;
+      await axios.post(this.baseURI + 'save', data).then(() => {
+        setTimeout(() => {
           this.isDisplay = true;
-          return a.Cengiz;
-        })
-        .catch((e) => console.log(e));
+        }, 3000);
+      });
     },
   },
-  computed: {
-  },
+  computed: {},
 
   created() {
-    this.getUserCommentsa
+    this.getByName(this.userName);
   },
 };
 </script>
