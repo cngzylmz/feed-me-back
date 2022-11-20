@@ -1,15 +1,12 @@
 <template>
-  <HeaderCommon
-    @click.prevent="
-      ()=>{
-        userName = ''
-        playSounds()
-      }
-    "
-  />
+  <HeaderCommon @click.prevent="headerClick" />
   <MenuTop @name="getUserComments($event)"></MenuTop>
   <LoadingRock :isShow="userName === ''" />
-  <UserComments v-if="userName === ''" :name="userName"></UserComments>
+  <UserComments
+    v-if="userName !== ''"
+    :userName="userName"
+    :key="key"
+  ></UserComments>
 </template>
 
 <script>
@@ -31,21 +28,24 @@ export default {
     return {
       dbLoading: false,
       userName: '',
+      key: Number,
     };
   },
   methods: {
+    headerClick() {
+      this.userName = '';
+      this.playSounds();
+    },
     getUserComments(name) {
       this.userName = name;
+      this.key++;
     },
     playSounds() {
       var audio = new Audio(require('@/assets/hit.mp3'));
       audio.play();
     },
   },
-  mounted(){
-    
-  },
-  
+  watch: {},
 };
 </script>
 
