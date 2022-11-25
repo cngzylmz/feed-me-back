@@ -1,68 +1,47 @@
 <template>
-  <RollingRock v-if="!isDisplay && !loading" />
-  <AddComment
-    v-if="isDisplay && !loading"
-    @sendComment="saveComment($event)"
-  ></AddComment>
-  <CommentCard v-if="isDisplay && !loading" :comment="comments"></CommentCard>
-  <div class="img-container">
-    <img v-if="loading" src="../assets/falling-rocks.gif" alt="" srcset="" />
+  <div>
+    <CommentCard :comment="c" v-for="(c,i) in comments" :key="i"></CommentCard>
   </div>
 </template>
 
 <script>
+import { getAll } from '../utilities/connectDB';
 import CommentCard from '../components/CommentCard.vue';
-import AddComment from './AddComment.vue';
-import RollingRock from './RollingRock.vue';
-import axios from 'axios';
 
 export default {
   name: 'UserComponent',
   components: {
     CommentCard,
-    AddComment,
-    RollingRock,
   },
   props: {
-    userName: String,
+    userName: {
+      type: String,
+      default: 'Cengiz',
+    },
   },
   data() {
     return {
       comments: [],
       isDisplay: true,
-      loading: false,
-      baseURI: 'https://feed-me-back-server.herokuapp.com/',
     };
   },
   methods: {
-    async getByName(name) {
-      this.loading = true;
-      const a = await axios.get(
-        this.baseURI + 'comments/' + name.toLowerCase()
-      );
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-      this.comments = a.data.comments;
-    },
-    async saveComment(comment) {
-      this.comments.push(comment);
-      const data = {
-        name: this.userName.toLocaleLowerCase(),
-        comments: this.comments,
-      };
-      this.isDisplay = false;
-      await axios.post(this.baseURI + 'save', data).then(() => {
-        setTimeout(() => {
+    getUserCommentsa() {
+      getAll()
+        .then((a) => {
+          console.log(a);
+          this.comments = a.Cengiz;
           this.isDisplay = true;
-        }, 3000);
-      });
+          return a.Cengiz;
+        })
+        .catch((e) => console.log(e));
     },
   },
-  computed: {},
+  computed: {
+  },
 
   created() {
-    this.getByName(this.userName);
+    this.getUserCommentsa
   },
 };
 </script>
