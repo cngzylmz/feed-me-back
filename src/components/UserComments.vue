@@ -1,8 +1,11 @@
 <template>
   <RollingRock v-if="!isDisplay && !loading" />
-  <AddComment v-if="isDisplay" @sendComment="saveComment($event)"></AddComment>
+  <AddComment
+    v-if="isDisplay && !loading"
+    @sendComment="saveComment($event)"
+  ></AddComment>
   <CommentCard v-if="isDisplay && !loading" :comment="comments"></CommentCard>
-  <div>
+  <div class="img-container">
     <img v-if="loading" src="../assets/falling-rocks.gif" alt="" srcset="" />
   </div>
 </template>
@@ -34,10 +37,14 @@ export default {
   methods: {
     async getByName(name) {
       this.loading = true;
-      const a = await axios
+      await axios
         .get(this.baseURI + 'comments/' + name.toLowerCase())
-        .then(() => (this.loading = false));
-      this.comments = a.data.comments;
+        .then((res) => {
+          this.comments = res.data.comments;
+          setTimeout(() => {
+            this.loading = false;
+          });
+        }, 5000);
     },
     async saveComment(comment) {
       this.comments.push(comment);
@@ -60,3 +67,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.img-container {
+  padding-top: 50px;
+  margin: auto;
+  text-align: center;
+  height: 50vh;
+}
+</style>
