@@ -68,7 +68,7 @@ export default {
   computed: {},
 
   created() {
-    this.getUserCommentsa;
+    this.getByName(this.userName);
   },
 };
 </script>
