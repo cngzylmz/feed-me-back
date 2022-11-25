@@ -13,7 +13,7 @@ export default {
 </script>
 <style scoped>
 .img-container {
-    padding-top: 50px;
+  padding-top: 50px;
   margin: auto;
   text-align: center;
   height: 50vh;
