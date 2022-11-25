@@ -1,7 +1,10 @@
 <template>
-  <RollingRock v-if="!isDisplay" />
+  <RollingRock v-if="!isDisplay && !loading" />
   <AddComment v-if="isDisplay" @sendComment="saveComment($event)"></AddComment>
-  <CommentCard v-if="isDisplay" :comment="comments"></CommentCard>
+  <CommentCard v-if="isDisplay && !loading" :comment="comments"></CommentCard>
+  <div>
+    <img v-if="loading" src="../assets/falling-rocks.gif" alt="" srcset="" />
+  </div>
 </template>
 
 <script>
