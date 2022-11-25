@@ -1,16 +1,26 @@
 <template>
-  <div>
-    <CommentCard :comment="c" v-for="(c,i) in comments" :key="i"></CommentCard>
+  <RollingRock v-if="!isDisplay && !loading" />
+  <AddComment
+    v-if="isDisplay && !loading"
+    @sendComment="saveComment($event)"
+  ></AddComment>
+  <CommentCard v-if="isDisplay && !loading" :comment="comments"></CommentCard>
+  <div class="img-container">
+    <img v-if="loading" src="../assets/falling-rocks.gif" alt="" srcset="" />
   </div>
 </template>
 
 <script>
-import { getAll } from '../utilities/connectDB';
+import RollingRock from '../components/RollingRock.vue';
+import AddComment from '../components/AddComment.vue';
 import CommentCard from '../components/CommentCard.vue';
+import axios from 'axios';
 
 export default {
   name: 'UserComponent',
   components: {
+    RollingRock,
+    AddComment,
     CommentCard,
   },
   props: {
@@ -22,26 +32,43 @@ export default {
   data() {
     return {
       comments: [],
+      loading: false,
       isDisplay: true,
     };
   },
   methods: {
-    getUserCommentsa() {
-      getAll()
-        .then((a) => {
-          console.log(a);
-          this.comments = a.Cengiz;
-          this.isDisplay = true;
-          return a.Cengiz;
+    async getByName(name) {
+      this.loading = true;
+      await axios
+        .get(this.baseURI + 'comments/' + name.toLowerCase())
+        .then((res) => {
+          this.comments = res.data.comments;
+          setTimeout(() => {
+            this.loading = false;
+          });
+        }, 5000);
+    },
+    async saveComment(comment) {
+      this.comments.push(comment);
+      const data = {
+        name: this.userName.toLocaleLowerCase(),
+        comments: this.comments,
+      };
+      this.isDisplay = false;
+      await axios
+        .post(this.baseURI + 'save', data)
+        .then(() => {
+          setTimeout(() => {
+            this.isDisplay = true;
+          }, 2000);
         })
         .catch((e) => console.log(e));
     },
   },
-  computed: {
-  },
+  computed: {},
 
   created() {
-    this.getUserCommentsa
+    this.getUserCommentsa;
   },
 };
 </script>
