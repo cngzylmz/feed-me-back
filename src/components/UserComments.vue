@@ -26,15 +26,17 @@ export default {
   data() {
     return {
       comments: [],
+      loading: false,
       isDisplay: true,
       baseURI: 'https://feed-me-back-server.herokuapp.com/',
     };
   },
   methods: {
     async getByName(name) {
-      const a = await axios.get(
-        this.baseURI + 'comments/' + name.toLowerCase()
-      );
+      this.loading = true;
+      const a = await axios
+        .get(this.baseURI + 'comments/' + name.toLowerCase())
+        .then(() => (this.loading = false));
       this.comments = a.data.comments;
     },
     async saveComment(comment) {
