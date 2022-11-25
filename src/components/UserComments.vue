@@ -11,29 +11,27 @@
 </template>
 
 <script>
-import RollingRock from '../components/RollingRock.vue';
-import AddComment from '../components/AddComment.vue';
 import CommentCard from '../components/CommentCard.vue';
+import AddComment from './AddComment.vue';
+import RollingRock from './RollingRock.vue';
 import axios from 'axios';
 
 export default {
   name: 'UserComponent',
   components: {
-    RollingRock,
-    AddComment,
     CommentCard,
+    AddComment,
+    RollingRock,
   },
   props: {
-    userName: {
-      type: String,
-      default: 'Cengiz',
-    },
+    userName: String,
   },
   data() {
     return {
       comments: [],
       loading: false,
       isDisplay: true,
+      baseURI: 'https://feed-me-back-server.herokuapp.com/',
     };
   },
   methods: {
@@ -55,14 +53,11 @@ export default {
         comments: this.comments,
       };
       this.isDisplay = false;
-      await axios
-        .post(this.baseURI + 'save', data)
-        .then(() => {
-          setTimeout(() => {
-            this.isDisplay = true;
-          }, 2000);
-        })
-        .catch((e) => console.log(e));
+      await axios.post(this.baseURI + 'save', data).then(() => {
+        setTimeout(() => {
+          this.isDisplay = true;
+        }, 3000);
+      });
     },
   },
   computed: {},
