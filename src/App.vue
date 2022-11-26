@@ -1,12 +1,8 @@
 <template>
   <HeaderCommon @click.prevent="headerClick" />
-  <MenuTop @name="getUserComments($event)"></MenuTop>
-  <LoadingRock :isShow="userName === ''" />
-  <UserComments
-    v-if="userName !== ''"
-    :userName="userName"
-    :key="key"
-  ></UserComments>
+  <MenuTop></MenuTop>
+  <LoadingRock :isShow="provide.userName === ''" />
+  <UserComments v-if="provide.userName !== ''" :key="key"></UserComments>
 </template>
 
 <script>
@@ -27,17 +23,27 @@ export default {
   data() {
     return {
       dbLoading: false,
-      userName: '',
+      provide: {
+        userName: '',
+      },
       key: Number,
     };
   },
+
+  provide() {
+    return {
+      getUserComments: this.getUserComments,
+      provide: this.provide,
+    };
+  },
+
   methods: {
     headerClick() {
-      this.userName = '';
+      this.provide.userName = '';
       this.playSounds();
     },
     getUserComments(name) {
-      this.userName = name;
+      this.provide.userName = name;
       this.key++;
     },
     playSounds() {

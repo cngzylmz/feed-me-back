@@ -23,9 +23,7 @@ export default {
     AddComment,
     RollingRock,
   },
-  props: {
-    userName: String,
-  },
+
   data() {
     return {
       comments: [],
@@ -34,6 +32,8 @@ export default {
       baseURI: 'https://feed-me-back-server.herokuapp.com/',
     };
   },
+
+  inject: ['provide'],
   methods: {
     async getByName(name) {
       this.loading = true;
@@ -41,15 +41,13 @@ export default {
         .get(this.baseURI + 'comments/' + name.toLowerCase())
         .then((res) => {
           this.comments = res.data.comments;
-          setTimeout(() => {
-            this.loading = false;
-          });
-        }, 5000);
+          this.loading = false;
+        });
     },
     async saveComment(comment) {
       this.comments.push(comment);
       const data = {
-        name: this.userName.toLocaleLowerCase(),
+        name: this.provide.userName.toLocaleLowerCase(),
         comments: this.comments,
       };
       this.isDisplay = false;
@@ -63,7 +61,7 @@ export default {
   computed: {},
 
   created() {
-    this.getByName(this.userName);
+    this.getByName(this.provide.userName);
   },
 };
 </script>
