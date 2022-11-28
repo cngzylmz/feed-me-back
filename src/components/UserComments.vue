@@ -29,7 +29,7 @@ export default {
       comments: [],
       loading: false,
       isDisplay: true,
-      baseURI: 'https://feed-me-back-server.herokuapp.com/',
+      baseURI: 'https://feed-me-back-server.onrender.com/',
     };
   },
 
